@@ -12,7 +12,7 @@ export default function JournalForm({ onSubmit }) {
       <form className="" onSubmit={addJournalItem}>
         <div className="flex flex-col gap-5">
           <input type="title" name="title" />
-          <input type="date" name="date" />
+          <input type="date" id="date" name="date" />
           <input type="text" name="tag" />
           <textarea name="text" id="" cols="30" rows="10"></textarea>
         </div>
