@@ -12,3 +12,14 @@
   background-color: rgba(255, 255, 255, 0.2);
   border-radius: 10px;
 }
+
+.inputForm {
+  background: none;
+  color: white;
+  outline: none;
+  font-family: "Inter";
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;
+}
