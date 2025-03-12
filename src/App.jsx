@@ -4,11 +4,30 @@ import Header from "./components/business/Header";
 import JournalAddButton from "./components/ui/JournalAddButton";
 import JournalList from "./components/business/JournalList";
 import JournalForm from "./components/business/JournalForm";
-import { useState } from "react";
-import { Information } from "../Data";
+import { useEffect, useState } from "react";
 
 function App() {
-  const [items, setItems] = useState(Information);
+  const [items, setItems] = useState([]);
+
+  // Доставание из LocalStorage информации и запись их в стейт
+  useEffect(() => {
+    const data = JSON.parse(localStorage.getItem("data"));
+    if (data) {
+      setItems(
+        data.map((item) => ({
+          ...item,
+          date: new Date(item.date),
+        }))
+      );
+    }
+  }, []);
+
+  // Запись новых элементов в localStorage
+  useEffect(() => {
+    if (items.length) {
+      localStorage.setItem("data", JSON.stringify(items));
+    }
+  }, [items]);
 
   function addItem(item) {
     setItems((oldItems) => [

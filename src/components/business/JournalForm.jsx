@@ -92,7 +92,7 @@ export default function JournalForm({ onSubmit }) {
             placeholder="Текст вашей заметки"
             name="text"
             id=""
-            className={`inputForm  border-y-[1px] p-2 placeholder-white placeholder-opacity-60 w-full h-[420px] resize-none ${
+            className={`inputForm  border-y-[1px] p-[15px] placeholder-white placeholder-opacity-60 w-full h-[420px] resize-none ${
               !formValidation.text
                 ? "border-red-600 border-opacity-60"
                 : "border-white border-opacity-10"
