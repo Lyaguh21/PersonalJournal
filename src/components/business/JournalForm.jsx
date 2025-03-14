@@ -1,46 +1,39 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer } from "react";
 import Button from "../ui/Button";
-const INITIAL = {
-  title: true,
-  date: true,
-  text: true,
-};
-export default function JournalForm({ onSubmit }) {
-  const [formValidation, setFormValidation] = useState(INITIAL);
+import { formReducer, INITIAL } from "./JournalForm.state";
 
+export default function JournalForm({ onSubmit }) {
+  const [formState, dispatchForm] = useReducer(formReducer, INITIAL);
+  const { isValid, isFormReadyToSubmit, values } = formState; //Деструктурирую
   useEffect(() => {
     let TimerID;
-    if (!formValidation.date || !formValidation.text || !formValidation.title) {
+    if (!isValid.date || !isValid.text || !isValid.title) {
       TimerID = setTimeout(() => {
-        setFormValidation(INITIAL);
+        dispatchForm({ type: "RESET_VALID" });
       }, 2000);
     }
     return () => {
       clearTimeout(TimerID);
     };
-  });
+  }, [isValid]);
+
+  useEffect(() => {
+    if (isFormReadyToSubmit) {
+      onSubmit(values);
+      dispatchForm({ type: "CLEAR" });
+    }
+  }, [isFormReadyToSubmit]);
 
   const addJournalItem = (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const formProps = Object.fromEntries(formData);
-    let isFormValid = true;
-    if (!formProps.title.trim().length) {
-      setFormValidation((state) => ({ ...state, title: false }));
-      isFormValid = false;
-    } else setFormValidation((state) => ({ ...state, title: true }));
-    if (!formProps.date) {
-      setFormValidation((state) => ({ ...state, date: false }));
-      isFormValid = false;
-    } else setFormValidation((state) => ({ ...state, date: true }));
-    if (!formProps.text.trim().length) {
-      setFormValidation((state) => ({ ...state, text: false }));
-      isFormValid = false;
-    } else setFormValidation((state) => ({ ...state, text: true }));
+    dispatchForm({ type: "SUBMIT" });
+  };
 
-    if (isFormValid) {
-      onSubmit(formProps);
-    }
+  const onChange = (e) => {
+    dispatchForm({
+      type: "SET_VALUE",
+      payload: { [e.target.name]: e.target.value },
+    });
   };
 
   return (
@@ -49,13 +42,15 @@ export default function JournalForm({ onSubmit }) {
         <div className="flex flex-col gap-[30px] mb-[30px]">
           <div
             className={`flex gap-3 border-white border-b-[1px] pb-[15px] border-opacity-10 ${
-              !formValidation.title
+              !isValid.title
                 ? "border-red-600 border-opacity-60"
                 : "border-white border-opacity-10"
             }`}
           >
             <input
               type="title"
+              onChange={onChange}
+              value={values.title}
               name="title"
               placeholder="Заголовок"
               className="inputForm text-[32px] font-semibold h-[40px] w-full placeholder-white placeholder-opacity-60"
@@ -71,8 +66,8 @@ export default function JournalForm({ onSubmit }) {
 
           <div className="flex flex-col ">
             <div
-              className={`flex w-[212px] border-b-[1px]  pb-[15px] justify-between ${
-                !formValidation.date
+              className={`flex w-[222px] border-b-[1px]  pb-[15px] justify-between ${
+                !isValid.date
                   ? "border-red-600 border-opacity-60"
                   : "border-white border-opacity-10"
               }`}
@@ -86,12 +81,14 @@ export default function JournalForm({ onSubmit }) {
 
               <input
                 type="date"
+                value={values.date}
+                onChange={onChange}
                 id="date"
                 name="date"
-                className="inputForm h-[18px] w-[88px]"
+                className="inputForm h-[18px] w-[105px]"
               />
             </div>
-            <div className="flex w-[212px] h-[48px] py-[15px] border-b-[1px] border-white border-opacity-10 pb-[15px] justify-between">
+            <div className="flex w-[222px] h-[48px] py-[15px] border-b-[1px] border-white border-opacity-10 pb-[15px] justify-between">
               <div className="flex w-[70px] justify-between">
                 <img src="\metki.svg" alt="" className="h-[18px]" />
                 <h5 className="text-white text-opacity-60 text-[14px] h-[18px] leading-[18px]">
@@ -102,17 +99,21 @@ export default function JournalForm({ onSubmit }) {
               <input
                 placeholder="Метка"
                 type="text"
+                value={values.tag}
+                onChange={onChange}
                 name="tag"
-                className="inputForm h-[18px] w-[88px] placeholder-white placeholder-opacity-60"
+                className="inputForm h-[18px] w-[105px] placeholder-white placeholder-opacity-60"
               />
             </div>
           </div>
           <textarea
             placeholder="Текст вашей заметки"
+            value={values.text}
+            onChange={onChange}
             name="text"
             id=""
             className={`inputForm  border-y-[1px] p-[15px] placeholder-white placeholder-opacity-60 w-full h-[420px] resize-none ${
-              !formValidation.text
+              !isValid.text
                 ? "border-red-600 border-opacity-60"
                 : "border-white border-opacity-10"
             }`}

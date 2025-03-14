@@ -43,9 +43,8 @@ function App() {
   }
 
   function clearList() {
-    console.log("CLEAN");
     localStorage.clear();
-    setItems(items);
+    setItems([]);
   }
   return (
     <section className="font-Inter flex">
