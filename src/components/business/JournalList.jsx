@@ -1,7 +1,11 @@
+import { useContext } from "react";
 import CardButton from "../ui/CardButton";
 import JournalItem from "./JournalItem";
+import { UserContext } from "../../context/userContext";
 
 export default function JournalList({ items }) {
+  const { userId } = useContext(UserContext);
+
   const sortItems = (a, b) => {
     if (a.date > b.date) {
       return 1;
@@ -17,11 +21,14 @@ export default function JournalList({ items }) {
         </div>
       )}
       {items.length > 0 &&
-        items.sort(sortItems).map((el) => (
-          <CardButton className="flex-col justify-between" key={el.id}>
-            <JournalItem title={el.title} text={el.text} date={el.date} />
-          </CardButton>
-        ))}
+        items
+          // .filter((el) => el.userId === userId)
+          .sort(sortItems)
+          .map((el) => (
+            <CardButton className="flex-col justify-between" key={el.id}>
+              <JournalItem title={el.title} text={el.text} date={el.date} />
+            </CardButton>
+          ))}
     </div>
   );
 }
