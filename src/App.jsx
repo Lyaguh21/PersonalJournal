@@ -41,10 +41,16 @@ function App() {
       },
     ]);
   }
+
+  function clearList() {
+    console.log("CLEAN");
+    localStorage.clear();
+    setItems(items);
+  }
   return (
     <section className="font-Inter flex">
       <LeftPanel>
-        <Header />
+        <Header clear={clearList} />
         <JournalAddButton />
         <JournalList items={items} />
       </LeftPanel>

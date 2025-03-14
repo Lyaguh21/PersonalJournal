@@ -1,10 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../ui/Button";
+const INITIAL = {
+  title: true,
+  date: true,
+  text: true,
+};
 export default function JournalForm({ onSubmit }) {
-  const [formValidation, setFormValidation] = useState({
-    title: true,
-    date: true,
-    text: true,
+  const [formValidation, setFormValidation] = useState(INITIAL);
+
+  useEffect(() => {
+    let TimerID;
+    if (!formValidation.date || !formValidation.text || !formValidation.title) {
+      TimerID = setTimeout(() => {
+        setFormValidation(INITIAL);
+      }, 2000);
+    }
+    return () => {
+      clearTimeout(TimerID);
+    };
   });
 
   const addJournalItem = (e) => {
@@ -47,7 +60,13 @@ export default function JournalForm({ onSubmit }) {
               placeholder="Заголовок"
               className="inputForm text-[32px] font-semibold h-[40px] w-full placeholder-white placeholder-opacity-60"
             />
-            <img src="\delete.svg" alt="" className="inputForm align-middle " />
+
+            <img
+              id="delete"
+              src="\delete.svg"
+              alt=""
+              className="inputForm align-middle "
+            />
           </div>
 
           <div className="flex flex-col ">
