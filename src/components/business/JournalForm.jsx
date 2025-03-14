@@ -1,13 +1,33 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useRef } from "react";
 import Button from "../ui/Button";
 import { formReducer, INITIAL } from "./JournalForm.state";
+import { Input } from "../ui/Input";
 
 export default function JournalForm({ onSubmit }) {
   const [formState, dispatchForm] = useReducer(formReducer, INITIAL);
   const { isValid, isFormReadyToSubmit, values } = formState; //Деструктурирую
+  const titleRef = useRef();
+  const dateRef = useRef();
+  const textRef = useRef();
+
+  const focusError = (isValid) => {
+    switch (true) {
+      case !isValid.title:
+        titleRef.current.focus();
+        break;
+      case !isValid.date:
+        dateRef.current.focus();
+        break;
+      case !isValid.text:
+        textRef.current.focus();
+        break;
+    }
+  };
+
   useEffect(() => {
     let TimerID;
     if (!isValid.date || !isValid.text || !isValid.title) {
+      focusError(isValid);
       TimerID = setTimeout(() => {
         dispatchForm({ type: "RESET_VALID" });
       }, 2000);
@@ -22,7 +42,7 @@ export default function JournalForm({ onSubmit }) {
       onSubmit(values);
       dispatchForm({ type: "CLEAR" });
     }
-  }, [isFormReadyToSubmit]);
+  }, [isFormReadyToSubmit, values, onSubmit]);
 
   const addJournalItem = (e) => {
     e.preventDefault();
@@ -41,19 +61,20 @@ export default function JournalForm({ onSubmit }) {
       <form className="" onSubmit={addJournalItem}>
         <div className="flex flex-col gap-[30px] mb-[30px]">
           <div
-            className={`flex gap-3 border-white border-b-[1px] pb-[15px] border-opacity-10 ${
+            className={`flex gap-3 border-b-[1px] pb-[15px]  ${
               !isValid.title
                 ? "border-red-600 border-opacity-60"
                 : "border-white border-opacity-10"
             }`}
           >
-            <input
+            <Input
               type="title"
               onChange={onChange}
               value={values.title}
+              ref={titleRef}
               name="title"
               placeholder="Заголовок"
-              className="inputForm text-[32px] font-semibold h-[40px] w-full placeholder-white placeholder-opacity-60"
+              appearance="long"
             />
 
             <img
@@ -79,13 +100,14 @@ export default function JournalForm({ onSubmit }) {
                 </h5>
               </div>
 
-              <input
+              <Input
                 type="date"
                 value={values.date}
                 onChange={onChange}
+                ref={dateRef}
                 id="date"
                 name="date"
-                className="inputForm h-[18px] w-[105px]"
+                appearance="short"
               />
             </div>
             <div className="flex w-[222px] h-[48px] py-[15px] border-b-[1px] border-white border-opacity-10 pb-[15px] justify-between">
@@ -95,14 +117,13 @@ export default function JournalForm({ onSubmit }) {
                   Метки
                 </h5>
               </div>
-
-              <input
+              <Input
                 placeholder="Метка"
                 type="text"
                 value={values.tag}
                 onChange={onChange}
                 name="tag"
-                className="inputForm h-[18px] w-[105px] placeholder-white placeholder-opacity-60"
+                appearance="short"
               />
             </div>
           </div>
@@ -110,9 +131,10 @@ export default function JournalForm({ onSubmit }) {
             placeholder="Текст вашей заметки"
             value={values.text}
             onChange={onChange}
+            ref={textRef}
             name="text"
             id=""
-            className={`inputForm  border-y-[1px] p-[15px] placeholder-white placeholder-opacity-60 w-full h-[420px] resize-none ${
+            className={`bg-[#181818] text-white outline-none font-Inter placeholder-white placeholder-opacity-60 border-y-[1px] p-[15px] placeholder-white placeholder-opacity-60 w-full h-[420px] resize-none ${
               !isValid.text
                 ? "border-red-600 border-opacity-60"
                 : "border-white border-opacity-10"

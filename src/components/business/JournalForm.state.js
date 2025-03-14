@@ -19,7 +19,7 @@ export function formReducer(state, action) {
       return { ...state, values: { ...state.values, ...action.payload } };
     }
     case "CLEAR": {
-      return { ...state, values: INITIAL.values };
+      return { ...state, values: INITIAL.values, isFormReadyToSubmit: false };
     }
     case "RESET_VALID":
       return { ...state, isValid: INITIAL.isValid };
