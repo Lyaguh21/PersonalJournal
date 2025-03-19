@@ -2,6 +2,7 @@ import { useContext, useEffect, useReducer, useRef } from "react";
 import Button from "../ui/Button";
 import { formReducer, INITIAL } from "./JournalForm.state";
 import { Input } from "../ui/Input";
+
 import { UserContext } from "../../context/userContext";
 
 export default function JournalForm({ onSubmit }) {
@@ -11,14 +12,14 @@ export default function JournalForm({ onSubmit }) {
   const dateRef = useRef();
   const textRef = useRef();
 
-  const { userID } = useContext(UserContext);
+  const { userId } = useContext(UserContext);
 
   useEffect(() => {
     dispatchForm({
       type: "SET_VALUE",
-      payload: { userID: userID },
+      payload: { userId: userId },
     });
-  }, [userID]);
+  }, [userId]);
 
   const focusError = (isValid) => {
     switch (true) {

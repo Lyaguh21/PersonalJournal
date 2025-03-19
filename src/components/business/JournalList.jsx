@@ -22,7 +22,7 @@ export default function JournalList({ items }) {
       )}
       {items.length > 0 &&
         items
-          // .filter((el) => el.userId === userId)
+          .filter((el) => el.userId === userId)
           .sort(sortItems)
           .map((el) => (
             <CardButton className="flex-col justify-between" key={el.id}>
