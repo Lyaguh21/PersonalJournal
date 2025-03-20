@@ -1,4 +1,3 @@
-import { useLocalStorage } from "../hooks/useLocalStorage";
 import { UserContext } from "../context/userContext";
 import { useContext } from "react";
 import JournalForm from "../components/business/JournalForm";
@@ -8,9 +7,8 @@ function mapItems(items) {
   return items.map((i) => ({ ...i, date: new Date(i.date) }));
 }
 
-export default function Body() {
+export default function Body({ items, setItems }) {
   const { userId } = useContext(UserContext);
-  const [items, setItems] = useLocalStorage("data");
 
   const addItem = (item) => {
     setItems([

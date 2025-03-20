@@ -8,11 +8,20 @@ export default function SelectUser() {
   };
   return (
     <>
-      <select name="user" id="user" value={userId} onChange={changeUser}>
-        <option value="1">Пользователь 1</option>
-        <option value="2">Пользователь 2</option>
+      <select
+        name="user"
+        id="user"
+        value={userId}
+        onChange={changeUser}
+        className="mt-[30px] text-white bg-opacity-5 bg-white px-5 py-3 rounded-[3px] w-full flex  hover:bg-opacity-10"
+      >
+        <option value="1" className="text-black">
+          Пользователь 1
+        </option>
+        <option value="2" className="text-black">
+          Пользователь 2
+        </option>
       </select>
-      {userId}
     </>
   );
 }
