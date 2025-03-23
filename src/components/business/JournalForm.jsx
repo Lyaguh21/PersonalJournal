@@ -1,12 +1,15 @@
-import { useContext, useEffect, useReducer, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import Button from "../ui/Button";
-import { formReducer, INITIAL } from "./JournalForm.state";
 import { Input } from "../ui/Input";
-
 import { UserContext } from "../../context/userContext";
 
-export default function JournalForm({ onSubmit, data, onDelete }) {
-  const [formState, dispatchForm] = useReducer(formReducer, INITIAL);
+export default function JournalForm({
+  formState,
+  dispatchForm,
+  onSubmit,
+  data,
+  onDelete,
+}) {
   const { isValid, isFormReadyToSubmit, values } = formState; //Деструктурирую
   const titleRef = useRef();
   const dateRef = useRef();

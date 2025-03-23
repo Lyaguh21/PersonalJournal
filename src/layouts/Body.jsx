@@ -7,7 +7,13 @@ function mapItems(items) {
   return items.map((i) => ({ ...i, date: new Date(i.date) }));
 }
 
-export default function Body({ items, setItems, data }) {
+export default function Body({
+  items,
+  setItems,
+  data,
+  dispatchForm,
+  formState,
+}) {
   const { userId } = useContext(UserContext);
 
   //создание и обновление элемента
@@ -44,7 +50,13 @@ export default function Body({ items, setItems, data }) {
 
   return (
     <div className="p-[50px] basis-4/6">
-      <JournalForm onSubmit={addItem} onDelete={deleteItem} data={data} />
+      <JournalForm
+        formState={formState}
+        dispatchForm={dispatchForm}
+        onSubmit={addItem}
+        onDelete={deleteItem}
+        data={data}
+      />
     </div>
   );
 }
