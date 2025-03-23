@@ -37,9 +37,14 @@ export default function Body({ items, setItems, data }) {
       ]);
     }
   };
+
+  const deleteItem = (id) => {
+    setItems([...items.filter((i) => i.id !== id)]);
+  };
+
   return (
     <div className="p-[50px] basis-4/6">
-      <JournalForm onSubmit={addItem} data={data} />
+      <JournalForm onSubmit={addItem} onDelete={deleteItem} data={data} />
     </div>
   );
 }

@@ -6,7 +6,8 @@ import { useState } from "react";
 
 function App() {
   const [items, setItems] = useLocalStorage("data");
-  const [selectedItem, setSelectedItem] = useState({});
+  const [selectedItem, setSelectedItem] = useState(null);
+  
   return (
     <UserContextProvider>
       <section className="font-Inter flex">

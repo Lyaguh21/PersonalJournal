@@ -5,7 +5,7 @@ import { Input } from "../ui/Input";
 
 import { UserContext } from "../../context/userContext";
 
-export default function JournalForm({ onSubmit, data }) {
+export default function JournalForm({ onSubmit, data, onDelete }) {
   const [formState, dispatchForm] = useReducer(formReducer, INITIAL);
   const { isValid, isFormReadyToSubmit, values } = formState; //Деструктурирую
   const titleRef = useRef();
@@ -36,11 +36,19 @@ export default function JournalForm({ onSubmit, data }) {
   };
 
   useEffect(() => {
-    dispatchForm({
-      type: "SET_VALUE",
-      payload: { ...data },
-    });
-  }, [data]);
+    if (!data) {
+      dispatchForm({ type: "CLEAR" });
+      dispatchForm({
+        type: "SET_VALUE",
+        payload: { userId: userId },
+      });
+    } else {
+      dispatchForm({
+        type: "SET_VALUE",
+        payload: { ...data },
+      });
+    }
+  }, [data, userId]);
 
   useEffect(() => {
     let TimerID;
@@ -78,6 +86,15 @@ export default function JournalForm({ onSubmit, data }) {
     });
   };
 
+  const deleteJournalItem = () => {
+    onDelete(data.id);
+    dispatchForm({ type: "CLEAR" });
+    dispatchForm({
+      type: "SET_VALUE",
+      payload: { userId: userId },
+    });
+  };
+
   return (
     <form className="" onSubmit={addJournalItem}>
       <div className="flex flex-col gap-[30px] mb-[30px]">
@@ -98,12 +115,17 @@ export default function JournalForm({ onSubmit, data }) {
             appearance="long"
           />
 
-          <img
-            id="delete"
-            src="\delete.svg"
-            alt=""
-            className="inputForm align-middle "
-          />
+          {data?.id ? (
+            <img
+              id="delete"
+              src="\delete.svg"
+              alt=""
+              className="inputForm align-middle hover:opacity-65"
+              onClick={deleteJournalItem}
+            />
+          ) : (
+            ""
+          )}
         </div>
 
         <div className="flex flex-col ">
