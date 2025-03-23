@@ -6,7 +6,9 @@ export default function JournalItem({ title, text, date }) {
 
       <div className="flex w-full justify-between">
         <h2 className="opacity-40">{formateDate}</h2>
-        <h2 className="opacity-60 ">{text}</h2>
+        <h2 className="opacity-60 overflow-hidden text-ellipsis max-w-[250px]">
+          {text}
+        </h2>
       </div>
     </>
   );

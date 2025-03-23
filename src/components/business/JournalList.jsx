@@ -1,9 +1,9 @@
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import CardButton from "../ui/CardButton";
 import JournalItem from "./JournalItem";
 import { UserContext } from "../../context/userContext";
 
-export default function JournalList({ items }) {
+export default function JournalList({ items, setItem }) {
   const { userId } = useContext(UserContext);
 
   const sortItems = (a, b) => {
@@ -13,6 +13,11 @@ export default function JournalList({ items }) {
     return -1;
   };
 
+  const filteredItem = useMemo(
+    () => items.filter((el) => el.userId === userId).sort(sortItems),
+    [items, userId]
+  );
+
   return (
     <div className=" flex flex-col gap-5">
       {items.length === 0 && (
@@ -21,14 +26,15 @@ export default function JournalList({ items }) {
         </div>
       )}
       {items.length > 0 &&
-        items
-          .filter((el) => el.userId === userId)
-          .sort(sortItems)
-          .map((el) => (
-            <CardButton className="flex-col justify-between" key={el.id}>
-              <JournalItem title={el.title} text={el.text} date={el.date} />
-            </CardButton>
-          ))}
+        filteredItem.map((el) => (
+          <CardButton
+            className="flex-col justify-between"
+            key={el.id}
+            onClick={setItem}
+          >
+            <JournalItem title={el.title} text={el.text} date={el.date} />
+          </CardButton>
+        ))}
     </div>
   );
 }
