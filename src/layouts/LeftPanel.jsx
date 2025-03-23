@@ -6,12 +6,7 @@ function mapItems(items) {
   if (!items) return [];
   return items.map((i) => ({ ...i, date: new Date(i.date) }));
 }
-export default function LeftPanel({
-  items,
-  setItems,
-  selectedItem,
-  setSelectedItem,
-}) {
+export default function LeftPanel({ items, setItems, setSelectedItem }) {
   function clearList() {
     localStorage.clear();
     setItems([]);

@@ -30,7 +30,7 @@ export default function JournalList({ items, setItem }) {
           <CardButton
             className="flex-col justify-between"
             key={el.id}
-            onClick={setItem}
+            onClick={() => setItem(el)}
           >
             <JournalItem title={el.title} text={el.text} date={el.date} />
           </CardButton>

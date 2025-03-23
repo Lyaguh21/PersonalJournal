@@ -13,10 +13,9 @@ function App() {
         <LeftPanel
           items={items}
           setItems={setItems}
-          selectedItem={selectedItem}
           setSelectedItem={setSelectedItem}
         />
-        <Body items={items} setItems={setItems} />
+        <Body items={items} setItems={setItems} data={selectedItem} />
       </section>
     </UserContextProvider>
   );
